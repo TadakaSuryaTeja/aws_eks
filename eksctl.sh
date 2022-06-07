@@ -8,12 +8,12 @@ export KUBECONFIG=$PWD/kubeconfig.yaml
 # Creating a cluster #
 ######################
 
-cat cluster-1.17.yaml
+cat cluster-1.22.yaml
 
 # Open https://eksctl.io/usage/schema/
 
 eksctl create cluster \
-    --config-file cluster-1.17.yaml
+    --config-file cluster-1.22.yaml
 
 ##########################
 # Exploring the outcomes #
@@ -30,21 +30,21 @@ kubectl get nodes
 #################################
 
 aws eks update-cluster-config \
-    --config-file cluster-1.17.yaml \
+    --config-file cluster-1.22.yaml \
     --logging '{"clusterLogging":[{"types":["api","audit","authenticator","controllerManager","scheduler"],"enabled":true}]}'
 
 ###############################
 # Upgrading the control plane #
 ###############################
 
-diff cluster-1.17.yaml \
-    cluster-1.18.yaml
+diff cluster-1.21.yaml \
+    cluster-1.22.yaml #You need to have a cluster-1.21.yaml file for checking the difference
 
 eksctl upgrade cluster \
-    --config-file cluster-1.18.yaml
+    --config-file cluster-1.22.yaml
 
 eksctl upgrade cluster \
-    --config-file cluster-1.18.yaml \
+    --config-file cluster-1.22.yaml \
     --approve
 
 kubectl get nodes
@@ -54,16 +54,16 @@ kubectl get nodes
 ##########################
 
 eksctl create nodegroup \
-    --config-file cluster-1.18.yaml
+    --config-file cluster-1.22.yaml
 
 kubectl get nodes
 
 eksctl delete nodegroup \
-    --config-file cluster-1.18.yaml \
+    --config-file cluster-1.22.yaml \
     --only-missing
 
 eksctl delete nodegroup \
-    --config-file cluster-1.18.yaml \
+    --config-file cluster-1.22.yaml \
     --only-missing \
     --approve
 
@@ -82,5 +82,5 @@ eksctl utils describe-addon-versions \
 ##########################
 
 eksctl delete cluster \
-    --config-file cluster-1.18.yaml \
+    --config-file cluster-1.22.yaml \
     --wait
