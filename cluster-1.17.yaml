@@ -1,0 +1,24 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: aws-eks-assessment
+  region: us-west-2
+  version: "1.22" # Latest kubernetes version
+managedNodeGroups:
+- name: linux
+  instanceType: t2.medium
+  minSize: 3
+  maxSize: 6
+  spot: true
+vpc:
+  id: ${vpc_id}
+  subnets:
+    private:
+      us-west-2:
+          id: ${security_group_id}
+    public:
+      us-west-2:
+          id: ${security_group_id}
+secretsEncryption:
+  # KMS key used for envelope encryption of Kubernetes secrets
+  keyARN: arn:aws:iam::511674593789:role/aws-service-role/eks.amazonaws.com/AWSServiceRoleForAmazonEKS
